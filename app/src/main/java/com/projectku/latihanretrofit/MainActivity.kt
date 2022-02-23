@@ -29,22 +29,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun getDataFromApi() {
 
-        ApiService.endpoint.getPhotos()
-            .enqueue(object : Callback<List<MainModel>> {
+        ApiService.endpoint.getData()
+            .enqueue(object : Callback<MainModel> {
+
                 override fun onResponse(
-                    call: Call<List<MainModel>>,
-                    response: Response<List<MainModel>>
+                    call: Call<MainModel>,
+                    response: Response<MainModel>
                 ) {
-                    if (response.isSuccessful){
-                        val result = response.body()
-                        showPhotos(result!!)
+                    if (response.isSuccessful) {
+                        showData(response.body()!!)
                     }
                 }
 
-                override fun onFailure(call: Call<List<MainModel>>, t: Throwable) {
+                override fun onFailure(call: Call<MainModel>, t: Throwable) {
                     printMessage(t.toString())
                 }
-
             })
     }
 
@@ -53,9 +52,10 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, message)
     }
 
-    private fun showPhotos(photos: List<MainModel>){
-        for(photo in photos){
-            printMessage("url : ${photo.url}")
+    private fun showData(data: MainModel) {
+        val results = data.result
+        for (result in results) {
+            printMessage("title : ${result.title}")
         }
     }
 
